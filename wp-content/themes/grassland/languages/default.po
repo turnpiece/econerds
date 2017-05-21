@@ -1,0 +1,221 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: grassland\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-08 01:08+0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Richie_KS <rkcorp@dezzain.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\xampp\\htdocs\\bptrunk\\wp-content\\themes\\grassland\n"
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/404.php:6
+msgid "It would seem you have found the unfindable."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:11
+msgid "Posted "
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:12
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:19
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:19
+msgid "By"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:14
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:21
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:21
+msgid " and has "
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:15
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:22
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:22
+msgid "no comments yet."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:15
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:22
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:22
+msgid "1 comment."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:15
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:22
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:22
+#, php-format
+msgid "% comments."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:17
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:89
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:24
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:24
+msgid "Edit"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:36
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:59
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:59
+msgid "Sorry"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/attachment.php:37
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:60
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:60
+msgid "We couldn't find what you were looking for."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:2
+msgid "Please don't do that."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:28
+msgid "Trackbacks"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:36
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:43
+msgid "Comments"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:84
+msgid "says:"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:88
+msgid " at "
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:90
+msgid "Your comment is not yet approved."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:113
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:115
+msgid "Leave a Comment"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:113
+#, php-format
+msgid "Leave a Reply to %s"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:122
+msgid "You must be logged in to comment."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:129
+msgid "Logged in as"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:129
+msgid "Log out of this account"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:129
+msgid "Log Out"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:135
+msgid "Name"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:135
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:141
+msgid "(required)"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:141
+msgid "Mail (will not be published)"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:147
+msgid "Website"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/comments.php:156
+msgid "Post your comment"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/footer.php:3
+msgid "Powered by"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/footer.php:5
+msgid "Hosted by"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/functions.php:37
+msgid "Oops! Try again."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/functions.php:38
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/header.php:50
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/searchform.php:4
+msgid "Search"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/functions.php:39
+msgid "Show trackbacks"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/functions.php:40
+msgid "Hide trackbacks"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/header.php:12
+msgid "global feed"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/header.php:45
+msgid "Site wide RSS feed."
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:16
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:16
+msgid " &raquo; Page"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:30
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:30
+msgid "Pages: "
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:38
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:38
+msgid "Categories:"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:44
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:44
+msgid "tags:"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:73
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:73
+msgid "&laquo; Previous page"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/index.php:74
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/search.php:74
+msgid "Next page &raquo;"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/sidebar.php:14
+msgid "Pages"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/sidebar.php:26
+msgid "Categories"
+msgstr ""
+
+#: C:\xampp\htdocs\bptrunk\wp-content\themes\grassland/sidebar.php:31
+msgid "Archives"
+msgstr ""
+
