@@ -30,7 +30,7 @@ require_once( get_stylesheet_directory() . '/lib/customize.php' );
 
 // Include Customizer CSS.
 include_once( get_stylesheet_directory() . '/lib/output.php' );
-
+/*
 // Include WooCommerce support.
 include_once( get_stylesheet_directory() . '/lib/woocommerce/woocommerce-setup.php' );
 
@@ -39,7 +39,7 @@ include_once( get_stylesheet_directory() . '/lib/woocommerce/woocommerce-output.
 
 // Include Genesis Connect WooCommerce notice.
 include_once( get_stylesheet_directory() . '/lib/woocommerce/woocommerce-notice.php' );
-
+*/
 // Child theme (do not remove).
 define( 'CHILD_THEME_NAME', __( 'Econerds News', 'econerds-news' ) );
 define( 'CHILD_THEME_URL', 'http://my.studiopress.com/themes/news/' );
