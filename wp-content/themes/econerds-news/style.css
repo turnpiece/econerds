@@ -155,7 +155,7 @@ html {
 
 /* Chrome fix */
 body > div {
-	font-size: 1.6rem;
+	font-size: 1.8rem;
 }
 
 body {
@@ -814,13 +814,13 @@ a.alignnone {
 a.alignleft,
 img.alignleft,
 .wp-caption.alignleft {
-	margin: 0 24px 16px 0;
+	margin: 8px 24px 8px 0;
 }
 
 a.alignright,
 img.alignright,
 .wp-caption.alignright {
-	margin: 0 0 24px 16px;
+	margin: 8px 0 24px 16px;
 }
 
 .entry-content .wp-caption-text {
@@ -896,8 +896,8 @@ img.alignright,
 --------------------------------------------- */
 
 .entry-title {
-	font-size: 36px;
-	font-size: 3.6rem;
+	font-size: 30px;
+	font-size: 3.0rem;
 	line-height: 1.2;
 }
 
@@ -1583,9 +1583,13 @@ img#wpstats {
 
 .entry-meta {
 	color: #999;
-	font-size: 12px;
-	font-size: 1.2rem;
+	font-size: 14px;
+	font-size: 1.4rem;
 	text-transform: uppercase;
+}
+
+.entry-header {
+	position: relative;
 }
 
 .entry-header .entry-meta {
@@ -1595,7 +1599,7 @@ img#wpstats {
 .entry-footer .entry-meta {
 	border-top: 1px dotted #e3e3e3;
 	margin: 0 -40px;
-	padding: 32px 40px 8px;
+	padding: 8px 40px;
 }
 
 .entry-comments-link::before {

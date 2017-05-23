@@ -54,6 +54,21 @@ function news_home_genesis_meta() {
 
 	}
 
+	// filter date and author display
+	add_filter( 'genesis_post_info', 'news_post_info' );
+
+	// remove tags
+	add_filter( 'genesis_post_meta', 'news_post_meta' );
+
+}
+
+// Just display the date with posts
+function news_post_info() {
+	return '[post_date] ' . __( 'by', 'econerds-news' ) . ' [post_author_posts_link]';
+}
+
+function news_post_meta() {
+	return '[post_categories]';
 }
 
 // Define econerds-news-home body class.
@@ -65,10 +80,10 @@ function news_body_class( $classes ) {
 
 }
 
-// Define excert length.
+// Define excerpt length.
 function news_excerpt_length( $length ) {
 
-	return 25; // Pull first 25 words.
+	return 50; // Pull first 50 words.
 	
 }
 
