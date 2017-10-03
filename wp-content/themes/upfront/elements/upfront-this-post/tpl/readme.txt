@@ -18,4 +18,4 @@ These are templates for the parts of a post. If you are used to the usual WP tem
 %thumbnail% - get_the_post_thumbnail();
 
 
-87274-1494967147-ai
+87274-1507059655-au

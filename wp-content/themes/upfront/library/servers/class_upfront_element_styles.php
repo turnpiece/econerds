@@ -145,7 +145,15 @@ class Upfront_ElementStyles extends Upfront_Server {
 	 */
 	public function load_scripts () {
 		$raw_cache_key = $this->_get_cached_scripts();
-		if (!empty($raw_cache_key)) wp_enqueue_script('upfront-element-scripts', $this->_get_enqueueing_url(self::TYPE_SCRIPT, $raw_cache_key), array('jquery'), $this->_get_enqueue_version(), true); // Scripts go into footer
+		if (!empty($raw_cache_key)) {
+			wp_enqueue_script(
+				'upfront-element-scripts',
+				$this->_get_enqueueing_url(self::TYPE_SCRIPT, $raw_cache_key),
+				array('jquery'),
+				$this->_get_enqueue_version(),
+			 	true
+			); // Scripts go into footer
+		}
 	}
 
 	/**
@@ -301,10 +309,10 @@ class Upfront_ElementStyles extends Upfront_Server {
 	/**
 	 * Obtain the enqueueing cache breaking version.
 	 *
-	 * @return string Child theme version info
+	 * @return string Core version info
 	 */
 	private function _get_enqueue_version () {
-		return Upfront_ChildTheme::get_version();
+		return Upfront_Compat::get_upfront_core_version();
 	}
 
 	/**
@@ -317,10 +325,7 @@ class Upfront_ElementStyles extends Upfront_Server {
 	 */
 	private function _get_enqueueing_url ($type, $key) {
 		$url = false;
-		$endpoint = self::TYPE_SCRIPT === $type
-			? 'scripts'
-			: 'styles'
-		;
+		$endpoint = self::get_endpoint_by_type($type);
 		if (Upfront_Behavior::debug()->is_active(Upfront_Debug::DEPENDENCIES)) {
 			$url = admin_url("admin-ajax.php?action=upfront-element-{$endpoint}&key={$key}");
 		} else {
@@ -330,7 +335,15 @@ class Upfront_ElementStyles extends Upfront_Server {
 				$key
 			)));
 		}
-		return $url;
+
+		return apply_filters('upfront-dependencies-enqueueing_url', $url, $type, $key);
+	}
+
+	public static function get_endpoint_by_type ($type) {
+		return self::TYPE_SCRIPT === $type
+			? 'scripts'
+			: 'styles'
+		;
 	}
 
 }

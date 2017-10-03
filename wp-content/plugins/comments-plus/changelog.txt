@@ -5,10 +5,21 @@ Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 
+1.6.9 - 2017-09-04
+----------------------------------------------------------------------
+- Fix: WordPress icon custom branding selector and styles
+- Fix: Twitter app creation/management URLs
+
+1.6.8 - 2017-04-00
+----------------------------------------------------------------------
+- Fix: Combine images into sprite
+- Fix: Facebook API connection issues
+- Fix: Update Facebook profile URLs format
+- Fix: Remove deprecated constructs
 
 1.6.7 - 2014-08-30
 ----------------------------------------------------------------------
-- Added more granunal Facebook permissions requesting strategy.
+- Added more granular Facebook permissions requesting strategy.
 - Added ability to mark social posting boxes as optional.
 
 1.6.6 - 2014-08-06
@@ -135,4 +146,4 @@ Change Log:
 - Initial release.
 
 
-87274-1410300557-ai
+87274-1507059474-au

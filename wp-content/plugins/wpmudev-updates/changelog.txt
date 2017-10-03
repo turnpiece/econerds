@@ -5,6 +5,31 @@ Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 
+4.4 - 9/21/2017 - Aaron & Alex
+----------------------------------------------------------------------
+- Add WP core upgrade support from Hub/Automate
+- Improve Hub remote call error responses
+- Switch background Dashboard autoupdates to use core method
+- Fix some syncing cache issues delaying the detection of available updates
+- Accessibility improvements for screenreaders
+
+4.3.2 - 7/31/2017 - Aaron & Ricardo
+----------------------------------------------------------------------
+- Make Hub initiated actions faster/more efficient by only syncing details when necessary
+- Improve debug log detail for Hub initiated actions
+- Show detailed error messages on local install failures
+- Fix various responsive UI style issues
+- Fix broken search box on Support page
+- Various spelling and text fixes
+
+4.3.1 - 6/1/2017 - Aaron & Ricardo
+----------------------------------------------------------------------
+- Redesign of the login process, headers, and home page UX
+- Add System Info tab to login page for debugging help
+- Allow HTML in features lists (Upfront Builder link)
+- Fix System info back button link
+- Text adjustments
+
 4.3 - 1/30/2017 - Aaron
 ----------------------------------------------------------------------
 - Full rewrite of remote API, to support Update/Install/Activate/Deactivate/Delete from hub
@@ -438,4 +463,4 @@ Added option to disable admin notices.
 Initial Release.
 
 
-87274-1494184636-au
+87274-1507059513-au

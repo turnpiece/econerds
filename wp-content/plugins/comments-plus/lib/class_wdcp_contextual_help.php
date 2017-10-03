@@ -27,7 +27,7 @@ class Wdcp_ContextualHelp {
 	private function _set_up_sidebar () {
 		$this->_sidebar = '<h4>' . __('Comments Plus', 'wdcp') . '</h4>';
 		if (defined('WPMUDEV_REMOVE_BRANDING') && constant('WPMUDEV_REMOVE_BRANDING')) {
-			$this->_sidebar .= '<p>' . __('The Comments Plus Plugin effectively allows you to combine comments from Facebook, Twitter and Google services with your standard WordPress comments, rather than picking just one.', 'wdcp') . '</p>';
+			$this->_sidebar .= '<p>' . __('The Comments Plus Plugin effectively allows you to combine comments from Facebook, Twitter and Google services with your standard WordPress comments, rather than picking just one.', 'wdcp') . '</p>';	 	 	 	 				    	
 		} else {
 				$this->_sidebar .= '<ul>' .
 					'<li><a href="http://premium.wpmudev.org/project/comments-plus" target="_blank">' . __('Project page', 'wdcp') . '</a></li>' .

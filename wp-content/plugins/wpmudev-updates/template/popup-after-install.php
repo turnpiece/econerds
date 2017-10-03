@@ -31,7 +31,7 @@ if ( 'plugin' == $item->type ) {
 }
 
 ?>
-<dialog title="<?php echo esc_html( $title ); ?>" class="small no-margin">
+<dialog title="<?php echo esc_html( $title ); ?>" class="wpmudui wpmudui-modal">
 
 <div class="wdp-success-msg" id="<?php echo esc_attr( $dialog_id ); ?>">
 <p>
@@ -53,10 +53,10 @@ esc_html_e( 'Do you want to activate the plugin now?', 'wpmudev' );
 
 <p class="buttons">
 	<?php if ( 'plugin' == $item->type ) : ?>
-	<a href="#activate" class="activate-plugin button button-small"><?php esc_html_e( 'Activate', 'wpmudev' ); ?></a>
-	<a href="#close" class="close button button-grey button-small"><?php esc_html_e( 'Continue installing plugins', 'wpmudev' ); ?></a>
+	<a role="button" href="#activate" class="activate-plugin wpmudui-btn is-sm is-brand"><?php esc_html_e( 'Activate', 'wpmudev' ); ?></a>
+	<a role="button" href="#close" class="close wpmudui-btn is-sm"><?php esc_html_e( 'Continue installing plugins', 'wpmudev' ); ?></a>
 	<?php else : ?>
-	<a href="#close" class="close button button-small"><?php esc_html_e( 'Okay', 'wpmudev' ); ?></a>
+	<a role="button" href="#close" class="close wpmudui-btn is-brand"><?php esc_html_e( 'Okay', 'wpmudev' ); ?></a>
 	<?php endif; ?>
 </p>
 </div>

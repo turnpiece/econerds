@@ -5,8 +5,6 @@
 class Wdcp_AdminFormRenderer {
 	var $_opts;
 
-	function Wdcp_AdminFormRenderer () { $this->__construct(); }
-
 	function __construct () {
 		$this->_opts = is_network_admin() ? get_site_option('wdcp_options') : get_option('wdcp_options');
 	}
@@ -82,13 +80,13 @@ class Wdcp_AdminFormRenderer {
 		if (!$has_creds) {
 			printf(__(
 				'<p><b>You must make a Twitter Application to start using Comments Plus.</b></p>' .
-				'<p>Before we begin, you need to <a target="_blank" href="https://dev.twitter.com/apps/new">create a Twitter Application</a>.</p>' .
+				'<p>Before we begin, you need to <a target="_blank" href="https://apps.twitter.com/app/new">create a Twitter Application</a>.</p>' .
 				'<p>To do so, follow these steps:</p>' .
 				'<ol>' .
-					'<li><a target="_blank" href="https://dev.twitter.com/apps/new">Create your application</a></li>' .
+					'<li><a target="_blank" href="https://apps.twitter.com/app/new">Create your application</a></li>' .
 					'<li>Look for <strong>Callback URL</strong> field and enter your site URL in this field: <code>%s</code></li>' .
 					'<li>Make sure you enable Read &amp; Write access level</li>' .
-					'<li>After this, go to the <a target="_blank" href="https://dev.twitter.com/apps">Twitter Application List page</a> and select your newly created application</li>' .
+					'<li>After this, go to the <a target="_blank" href="https://apps.twitter.com/">Twitter Application List page</a> and select your newly created application</li>' .
 					'<li>Copy the values from these fields: <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>, and enter them here:</li>' .
 				'</ol>',
 			'wdcp'),
@@ -199,7 +197,7 @@ class Wdcp_AdminFormRenderer {
 		$value = $this->_get_option('begin_injection_hook');
 		$value = $value ? $value : 'comment_form_before';
 		echo $this->_create_text_box('begin_injection_hook', $value);
-		echo '<div><small>' . __('This is the hook that starts your comments form interface. By default, we\'re using <code>comment_form_before</code>. To reset to default, delete all contents of this field and save changes.', 'wdcp') . '</small></div>';	 	 	 	 				    	
+		echo '<div><small>' . __('This is the hook that starts your comments form interface. By default, we\'re using <code>comment_form_before</code>. To reset to default, delete all contents of this field and save changes.', 'wdcp') . '</small></div>';
 	}
 
 	function create_end_hook_box () {

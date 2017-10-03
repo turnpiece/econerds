@@ -42,7 +42,7 @@ if ( ! $res->is_installed ) {
 	if ( ! $res->is_licensed ) {
 		$action = __( 'Upgrade', 'wpmudev' );
 		$action_url = '#upgrade';
-		$action_class = 'button button-cta';
+		$action_class = 'is-cta';
 		$action_attr['rel'] = 'dialog';
 	} elseif ( $res->is_compatible && $res->url->install ) {
 		$action = __( 'Install', 'wpmudev' );
@@ -52,15 +52,15 @@ if ( ! $res->is_installed ) {
 			esc_attr( $res->name )
 		);
 		$action_url = $res->url->install;
-		$action_class = 'button-green button-cta';
+		$action_class = 'is-cta';
 	} elseif ( $res->is_compatible ) {
 		$action = __( 'Download', 'wpmudev' );
 		$action_url = $res->url->download;
-		$action_class = 'button-secondary';
+		$action_class = 'is-brand';
 		$target = '_blank';
 	} else {
 		$action = $res->incompatible_reason;
-		$action_class = 'disabled';
+		$action_class = ' disabled';
 	}
 } else {
 	/*
@@ -72,7 +72,7 @@ if ( ! $res->is_installed ) {
 		// 1. Check if the project can be updated.
 		$action = __( 'Update', 'wpmudev' );
 		$action_url = '#update=' . $pid;
-		$action_class = 'has-update button-yellow';
+		$action_class = 'is-brand has-update';
 		$show_badge = $res->type;
 	} elseif ( $res->special ) {
 		// 2. This is a dropin/mu-plugin.
@@ -125,6 +125,7 @@ if ( ! $res->is_installed ) {
 				$action = __( 'Activate', 'wpmudev' );
 			}
 			$action_ajax = 'project-activate';
+			$action_class = 'is-brand';
 
 			if ( ! $res->can_activate ) {
 				$action_class .= ' disabled';
@@ -137,6 +138,7 @@ if ( ! $res->is_installed ) {
 				// Activate theme on single site.
 				$action = __( 'Activate', 'wpmudev' );
 			}
+			$action_class = 'is-brand';
 
 			$action_ajax = 'project-activate';
 
@@ -171,7 +173,7 @@ if ( ! $action ) {
 		$action = __( 'Plugin details', 'wpmudev' );
 	}
 	$action_url = '#pid=' . $res->pid;
-	$action_class = 'show-info button-light';
+	$action_class = 'show-info';
 }
 
 $minor_actions = array();
@@ -185,9 +187,9 @@ if ( $res->is_active && $res->url->config ) {
 /*
 if ( 'plugin' == $res->type && $res->is_active && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 	$minor_actions[] = sprintf(
-		'<span tooltip="%s" class="tooltip-l"><a href="#reload" class="reload-page">%s %s</a></span>',
+		'<span tooltip="%s" class="tooltip-l"><a role="button" href="#reload" class="reload-page">%s %s</a></span>',
 		__( 'Maybe this plugin added a new menu item. Reload the page to see it', 'wpmudev' ),
-		'<i class="wdv-icon wdv-icon-refresh spin-on-click"></i>',
+		'<i aria-hidden="true" class="wdv-icon wdv-icon-refresh spin-on-click"></i>',
 		__( 'Reload page', 'wpmudev' )
 	);
 }
@@ -228,7 +230,7 @@ if ( $action_ajax && empty( $action_url ) ) {
 <div class="project-inner">
 	<div class="show-info">
 	<h4><?php echo esc_html( $res->name ); ?></h4>
-	<div class="project-image">
+	<div aria-hidden="true" class="project-image">
 		<span class="img" style="background-image: url(<?php echo esc_url( $res->url->thumbnail ); ?>), url(<?php echo esc_url( $url_spinner ); ?>);">
 		</span>
 	</div>
@@ -238,7 +240,7 @@ if ( $action_ajax && empty( $action_url ) ) {
 	</div>
 	<div class="project-action">
 		<a
-		class="button block <?php echo esc_attr( $action_class ); ?>"
+		class="wpmudui-btn is-full <?php echo esc_attr( $action_class ); ?>"
 		<?php if ( $action_ajax ) : ?>
 		data-action="<?php echo esc_attr( $action_ajax ); ?>"
 		data-hash="<?php echo esc_attr( wp_create_nonce( $action_ajax ) ); ?>"
@@ -270,13 +272,13 @@ if ( $action_ajax && empty( $action_url ) ) {
 	<?php if ( $show_badge ) : ?>
 	<span class="badge badge-<?php echo esc_attr( $show_badge ); ?>">
 		<?php if ( 'plugin' == $show_badge ) { ?>
-		<i class="dev-icon dev-icon-plugin"></i>
+		<i aria-hidden="true" class="dev-icon dev-icon-plugin"></i>
 		<?php } elseif ( 'theme' == $show_badge ) { ?>
-		<i class="dev-icon dev-icon-theme"></i>
+		<i aria-hidden="true" class="dev-icon dev-icon-theme"></i>
 		<?php } elseif ( 'warning' == $show_badge ) { ?>
-		<i class="dashicons dashicons-warning"></i>
+		<i aria-hidden="true" class="dashicons dashicons-warning"></i>
 		<?php } elseif ( 'active-theme' == $show_badge ) { ?>
-		<i class="dev-icon dev-icon-radio_checked"></i>
+		<i aria-hidden="true" class="dev-icon dev-icon-radio_checked"></i>
 		<?php } ?>
 	</span>
 	<?php endif; ?>

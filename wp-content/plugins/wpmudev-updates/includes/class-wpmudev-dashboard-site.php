@@ -178,7 +178,9 @@ class WPMUDEV_Dashboard_Site {
 			add_action( "wp_ajax_nopriv_$action", array( $this, 'nopriv_process_ajax' ) );
 		}
 
-		// Check for compatibility issues and display a notificaton if needed.
+		add_action( "wp_ajax_wdpun-connect", array( $this, 'ajax_connect' ) );
+
+		// Check for compatibility issues and display a notification if needed.
 		add_action(
 			'admin_init',
 			array( $this, 'compatibility_warnings' )
@@ -291,7 +293,6 @@ class WPMUDEV_Dashboard_Site {
 	 * Function contains a complete list of all used Dashboard settings.
 	 *
 	 * @since  4.0.0
-	 * @internal
 	 * @param  string $action Can be set to 'reset' to overwrite all plugin
 	 *                options with the initial value (as if plugin was just
 	 *                installed for the first time).
@@ -303,7 +304,6 @@ class WPMUDEV_Dashboard_Site {
 			'limit_to_user' => '',
 			'remote_access' => '',
 			'refresh_remote_flag' => 0,
-			'refresh_local_flag' => 0,
 			'refresh_profile_flag' => 0,
 			'updates_data' => '',
 			'profile_data' => '',
@@ -312,11 +312,9 @@ class WPMUDEV_Dashboard_Site {
 			'last_run_updates' => 0,
 			'last_run_profile' => 0,
 			'last_check_upfront' => 0,
-			'last_check_autoupdate' => 0,
 			'staff_notes' => '',
 			'redirected_v4' => 0, // We want to redirect all users after first v4 activation!
 			'autoupdate_dashboard' => 1,
-			'autoupdate_schedule' => array(),
 			'notifications' => array(),
 			// 'blog_active_projects' => array(), // Only used on multisite. Not finished.
 			'auth_user' => null, // NULL means: Ignore during 'reset' action.
@@ -564,10 +562,8 @@ class WPMUDEV_Dashboard_Site {
 			// Tab: Plugins
 			// Function to check for updates again.
 			case 'check-updates':
-				WPMUDEV_Dashboard::$site->set_option( 'refresh_remote_flag', 1 );
-				WPMUDEV_Dashboard::$site->set_option( 'refresh_local_flag', 1 );
 				WPMUDEV_Dashboard::$site->set_option( 'refresh_profile_flag', 1 );
-				WPMUDEV_Dashboard::$site->set_option( 'updates_available', false );
+				WPMUDEV_Dashboard::$site->refresh_local_projects( 'remote' );
 				$success = 'SILENT';
 				break;
 		}
@@ -696,10 +692,8 @@ class WPMUDEV_Dashboard_Site {
 					break;
 
 				case 'check-updates':
-					WPMUDEV_Dashboard::$site->set_option( 'refresh_remote_flag', 1 );
-					WPMUDEV_Dashboard::$site->set_option( 'refresh_local_flag', 1 );
 					WPMUDEV_Dashboard::$site->set_option( 'refresh_profile_flag', 1 );
-					WPMUDEV_Dashboard::$site->set_option( 'updates_available', false );
+					WPMUDEV_Dashboard::$site->refresh_local_projects( 'remote' );
 					$this->send_json_success();
 					break;
 
@@ -762,11 +756,8 @@ class WPMUDEV_Dashboard_Site {
 								'popup-after-install'
 							);
 						} else {
-							WPMUDEV_Dashboard::$ui->render_project(
-								$pid,
-								false,
-								'popup-after-install-failed'
-							);
+							$err = WPMUDEV_Dashboard::$upgrader->get_error();
+							$this->send_json_error( $err );
 						}
 					}
 					break;
@@ -939,6 +930,40 @@ class WPMUDEV_Dashboard_Site {
 					);
 					break;
 			}
+		}
+	}
+
+	/**
+	 * Used by the Getting started wizard on WPMU DEV to programatically login to the dashboard
+	 *
+	 * @param $_REQUEST['apikey']
+	 */
+	public function ajax_connect() {
+
+		//check permissions
+		if ( ! current_user_can( 'manage_network_options') ) {
+			$this->send_json_error( 'No permissions' );
+		}
+
+		WPMUDEV_Dashboard::$api->set_key( trim( $_REQUEST['apikey'] ) );
+		$result = WPMUDEV_Dashboard::$api->refresh_membership_data( false, true );
+		if ( ! $result || empty( $result['membership'] ) ) {
+			// Don't logout at this point!
+			WPMUDEV_Dashboard::$api->set_key( '' );
+			if ( false === $result ) {
+				$this->send_json_error( WPMUDEV_Dashboard::$api->api_error );
+			} else {
+				$this->send_json_error( __( 'Your API Key was invalid. Please try again.', 'wpmudev' ) );
+			}
+		} else {
+			// You did it! Login was successful :)
+			// The current user is our new hero-user with Dashboard access.
+			WPMUDEV_Dashboard::$site->set_option( 'limit_to_user', get_current_user_id() );
+			WPMUDEV_Dashboard::$api->refresh_profile();
+			// User is logged in: First redirect is done.
+			WPMUDEV_Dashboard::$site->set_option( 'redirected_v4', 1 );
+
+			$this->send_json_success();
 		}
 	}
 
@@ -1352,21 +1377,23 @@ class WPMUDEV_Dashboard_Site {
 			// E.g. it was installed and then the admin logged out from WPMU DEV
 			// Dashboard, or the API-Key was changed from the Hub, ...
 			if ( $res->is_installed ) {
-				if ( ! empty( $local['name'] ) ) { $res->name = $local['name']; }
+				if ( ! empty( $local['name'] ) ) {
+					$res->name = $local['name'];
+				}
 				if ( 'muplugin' == $local['type'] ) {
 					$res->special = $local['type'];
 				} elseif ( 'dropin' == $local['type'] ) {
 					$res->special = $local['type'];
 				}
-				$res->path = $local['path'];
-				$res->filename = $local['filename'];
-				$res->slug = $local['slug'];
+				$res->path              = $local['path'];
+				$res->filename          = $local['filename'];
+				$res->slug              = $local['slug'];
 				$res->version_installed = $local['version'];
-				$res->has_update = WPMUDEV_Dashboard::$upgrader->is_update_available( $pid );
+				$res->has_update        = WPMUDEV_Dashboard::$upgrader->is_update_available( $pid );
 
 				if ( 'plugin' == $res->type ) {
 					if ( ! function_exists( 'is_plugin_active' ) ) {
-						include_once ABSPATH . 'wp-admin/includes/plugin.php' ;
+						include_once ABSPATH . 'wp-admin/includes/plugin.php';
 					}
 
 					if ( $is_network_admin ) {
@@ -1379,7 +1406,7 @@ class WPMUDEV_Dashboard_Site {
 						$allowed_themes = get_site_option( 'allowedthemes' );
 						$res->is_active = ! empty( $allowed_themes[ $res->slug ] );
 					} else {
-						$res->is_active = ($res->slug == get_option( 'stylesheet' ) );
+						$res->is_active = ( $res->slug == get_option( 'stylesheet' ) );
 					}
 				}
 			}
@@ -2106,7 +2133,6 @@ class WPMUDEV_Dashboard_Site {
 	 * changes found it will trigger remote api check and calculate upgrades as well.
 	 *
 	 * @since  1.0.0
-	 * @internal
 	 * @param  string $check Either 'local' or 'remote'. Local will only scan
 	 *                the local FS for changes. Remote will also query the API
 	 *                and schedule updates.
@@ -2126,6 +2152,11 @@ class WPMUDEV_Dashboard_Site {
 		if ( 'remote' == $check || $md5_db != $md5_fs ) {
 			self::$_cache_themeupdates = false;
 			self::$_cache_pluginupdates = false;
+			$this->set_transient(
+				'local_projects',
+				$local_projects,
+				5 * MINUTE_IN_SECONDS
+			);
 			$this->set_option( 'updates_available', false );
 			$data = WPMUDEV_Dashboard::$api->refresh_membership_data( $local_projects );
 
@@ -2268,7 +2299,7 @@ class WPMUDEV_Dashboard_Site {
 	 * Sends latest data to DEV if schedule at end of page load
 	 */
 	public function shutdown_refresh() {
-		if ( self::$_refresh_shutdown_flag ) {
+		if ( self::$_refresh_shutdown_flag && ! defined( 'WPMUDEV_REMOTE_SKIP_SYNC' ) ) {
 			WPMUDEV_Dashboard::$site->refresh_local_projects( 'remote' );
 		}
 	}
@@ -2596,12 +2627,14 @@ class WPMUDEV_Dashboard_Site {
 
 					// Build plugin class.
 					$object = (object) array(
-						'url' => $plugin['url'],
-						'slug' => $local['slug'],
+						'id'          => "wpmudev/plugins/$id",
+						'slug'        => $local['slug'],
+						'plugin'      => $plugin['filename'],
 						'new_version' => $plugin['new_version'],
-						'package' => $package,
-						'autoupdate' => $autoupdate,
-						'tested' => $cur_wp_version,
+						'url'         => $plugin['url'],
+						'package'     => $package,
+						'autoupdate'  => $autoupdate,
+						'tested'      => $cur_wp_version,
 					);
 
 					// Add update information to response.
@@ -2661,6 +2694,9 @@ class WPMUDEV_Dashboard_Site {
 
 					// Build theme listing.
 					$object = array();
+					$object['pid'] = $id; //we add this so we can detect it later when wp core autoupdater triggers
+					$object['theme'] = $theme_slug;
+					$object['new_version'] = $theme['new_version'];
 					$object['url'] = add_query_arg(
 						array(
 							'action' => 'wdp-changelog',
@@ -2669,9 +2705,7 @@ class WPMUDEV_Dashboard_Site {
 						),
 						admin_url( 'admin-ajax.php' )
 					);
-					$object['new_version'] = $theme['new_version'];
 					$object['package'] = WPMUDEV_Dashboard::$api->rest_url_auth( 'download/' . $id );
-					$object['theme'] = $theme_slug;
 					$object['tested'] = $cur_wp_version;
 
 					// Add changes back into response.

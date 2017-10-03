@@ -226,7 +226,7 @@ class WPMUDEV_Dashboard_Api {
 			array(
 				'timeout'    => 15,
 				'sslverify'  => WPMUDEV_API_SSLVERIFY,
-				'user-agent' => 'UN Client/' . WPMUDEV_Dashboard::$version,
+				'user-agent' => 'WPMUDEV Dashboard Client/' . WPMUDEV_Dashboard::$version . " (+" . network_site_url() . ")",
 			)
 		);
 
@@ -260,7 +260,37 @@ class WPMUDEV_Dashboard_Api {
 		if ( WPMUDEV_API_DEBUG ) {
 			$log = '[WPMUDEV API call] %s | %s: %s (%s)';
 			if ( WPMUDEV_API_DEBUG_ALL ) {
-				$log .= "\nRequest options: %s\nResponse:\n%s";
+				$log .= "\nRequest options: %s\nResponse: %s";
+			}
+
+			//strip down big vars unless WPMUDEV_API_DEBUG_CRAZY is defined
+			$resp_body = wp_remote_retrieve_body( $response );
+			if ( ! defined( 'WPMUDEV_API_DEBUG_CRAZY' ) ) {
+				$req_body = isset( $options['body'] ) ? $options['body'] : '';
+				if ( isset( $req_body['projects'] ) ) {
+					$req_body['projects']     = count( (array) json_decode( $req_body['projects'] ) ) . ' PROJECTS';
+					$req_body['repo_updates'] = count( (array) json_decode( $req_body['repo_updates'] ) ) . ' REPO_UPDATES';
+					$packages                 = (object) json_decode( $req_body['packages'] );
+					$packages->plugins        = count( (array) $packages->plugins ) . ' PLUGINS';
+					$packages->themes         = count( (array) $packages->themes ) . ' THEMES';
+					$req_body['packages']     = json_encode( $packages );
+				}
+				$options['body'] = $req_body;
+
+				$resp_body = json_decode( wp_remote_retrieve_body( $response ) );
+				if ( is_object( $resp_body ) ) {
+					$resp_body->projects    = '[...]';
+					$resp_body->plugin_tags = '[...]';
+				}
+				$resp_body = json_encode( $resp_body );
+			}
+
+			if ( $response && is_array( $response ) ) {
+				$debug_data = sprintf( "%s %s\n", wp_remote_retrieve_response_code( $response ), wp_remote_retrieve_response_message( $response ) );
+				$debug_data .= var_export( wp_remote_retrieve_headers( $response ), true ) . PHP_EOL;
+				$debug_data .= $resp_body;
+			} else {
+				$debug_data = '';
 			}
 
 			$msg = sprintf(
@@ -270,7 +300,7 @@ class WPMUDEV_Dashboard_Api {
 				$link,
 				wp_remote_retrieve_response_code( $response ),
 				json_encode( $options ),
-				var_export( $response, true )
+				$debug_data
 			);
 			error_log( $msg );
 		}
@@ -300,7 +330,12 @@ class WPMUDEV_Dashboard_Api {
 			if ( ! is_array( $data ) ) {
 				$data = array();
 			}
-			$data['api_key'] = $this->get_key();
+
+			$key_data = array();
+			$key_data['api_key'] = $this->get_key();
+
+			//make sure api key is first
+			$data = array_merge( $key_data, $data );
 		}
 
 		$response = $this->call( $remote_path, $data, $method, $options );
@@ -909,16 +944,16 @@ class WPMUDEV_Dashboard_Api {
 		$call_version = WPMUDEV_Dashboard::$version;
 
 		$data = array(
+			'call_version' => $call_version,
+			'domain'       => network_site_url(),
 			'blog_count'   => $blog_count,
 			'wp_version'   => $wp_ver,
 			'projects'     => $projects,
-			'domain'       => network_site_url(),
 			'admin_url'    => network_admin_url(),
 			'home_url'     => network_home_url(),
 			'repo_updates' => $repo_updates,
 			'packages'     => $packages,
 			'auth_cookies' => $auth_cookies,
-			'call_version' => $call_version,
 		);
 
 		if ( $encoded ) {
@@ -974,40 +1009,35 @@ class WPMUDEV_Dashboard_Api {
 		);
 
 		if ( 200 == wp_remote_retrieve_response_code( $response ) ) {
-			$data = $response['body'];
-
-			if ( 'error' != $data ) {
-				$data = json_decode( $data, true );
-
-				if ( is_array( $data ) ) {
-					if ( empty( $data['membership'] ) ) {
-						WPMUDEV_Dashboard::$site->logout();
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( is_array( $data ) ) {
+				if ( isset( $data['membership'] ) && empty( $data['membership'] ) && ! defined( 'WPMUDEV_APIKEY' ) && WPMUDEV_Dashboard::$api->has_key() ) {
+					if ( WPMUDEV_API_DEBUG ) {
+						error_log( '[WPMUDEV API Warning] Invalid API key, logging out.' );
 					}
-
-					// Default order to display plugins is the order in the array.
-					if ( isset( $data['projects'] ) ) {
-						$pos = 1;
-						foreach ( $data['projects'] as $id => $project ) {
-							$data['projects'][ $id ]['_order'] = $pos;
-							$pos += 1;
-						}
-					}
-
-					// Remove projects that are not accessible for current member.
-					$data = $this->strip_unavailable_projects( $data );
-
-					WPMUDEV_Dashboard::$site->set_option( 'updates_data', $data );
-					WPMUDEV_Dashboard::$site->set_option( 'last_run_updates', time() );
-					$this->calculate_upgrades( $local_projects );
-					$this->enqueue_notices( $data );
-
-					$res = $data;
-				} else {
-					$this->parse_api_error( 'Error unserializing remote response.' );
+					WPMUDEV_Dashboard::$api->set_key( '' );
 				}
+
+				// Default order to display plugins is the order in the array.
+				if ( isset( $data['projects'] ) ) {
+					$pos = 1;
+					foreach ( $data['projects'] as $id => $project ) {
+						$data['projects'][ $id ]['_order'] = $pos;
+						$pos += 1;
+					}
+				}
+
+				// Remove projects that are not accessible for current member.
+				$data = $this->strip_unavailable_projects( $data );
+
+				WPMUDEV_Dashboard::$site->set_option( 'updates_data', $data );
+				WPMUDEV_Dashboard::$site->set_option( 'last_run_updates', time() );
+				$this->calculate_upgrades( $local_projects );
+				$this->enqueue_notices( $data );
+
+				$res = $data;
 			} else {
-				$this->parse_api_error( 'API returned general error.' );
-				WPMUDEV_Dashboard::$site->logout();
+				$this->parse_api_error( 'Error unserializing remote response.' );
 			}
 		} else {
 			$this->parse_api_error( $response );
@@ -1058,39 +1088,31 @@ class WPMUDEV_Dashboard_Api {
 		);
 
 		if ( 200 == wp_remote_retrieve_response_code( $response ) ) {
-			$data = $response['body'];
-
-			if ( 'error' != $data ) {
-				$data = json_decode( $data, true );
-
-				if ( is_array( $data ) ) {
-					// 3.1.2 - 2012-06-26 PaulM Convert image urls for ssl admin
-					if ( is_ssl() && isset( $data['profile']['gravatar'] ) ) {
-						$data['profile']['gravatar'] = str_replace(
-							'http://',
-							'https://',
-							$data['profile']['gravatar']
-						);
-					}
-
-					WPMUDEV_Dashboard::$site->set_option( 'profile_data', $data );
-					WPMUDEV_Dashboard::$site->set_option( 'last_run_profile', time() );
-
-					if ( ! empty( $data['profile']['user_name'] ) ) {
-						// The only place we use this, is the login form.
-						WPMUDEV_Dashboard::$site->set_option(
-							'auth_user',
-							$data['profile']['user_name']
-						);
-					}
-
-					$res = $data;
-				} else {
-					$this->parse_api_error( 'Error unserializing remote response.' );
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( is_array( $data ) ) {
+				// 3.1.2 - 2012-06-26 PaulM Convert image urls for ssl admin
+				if ( is_ssl() && isset( $data['profile']['gravatar'] ) ) {
+					$data['profile']['gravatar'] = str_replace(
+						'http://',
+						'https://',
+						$data['profile']['gravatar']
+					);
 				}
+
+				WPMUDEV_Dashboard::$site->set_option( 'profile_data', $data );
+				WPMUDEV_Dashboard::$site->set_option( 'last_run_profile', time() );
+
+				if ( ! empty( $data['profile']['user_name'] ) ) {
+					// The only place we use this, is the login form.
+					WPMUDEV_Dashboard::$site->set_option(
+						'auth_user',
+						$data['profile']['user_name']
+					);
+				}
+
+				$res = $data;
 			} else {
-				$this->parse_api_error( 'API returned general error.' );
-				WPMUDEV_Dashboard::$site->logout();
+				$this->parse_api_error( 'Error unserializing remote response.' );
 			}
 		} else {
 			$this->parse_api_error( $response );
@@ -1141,25 +1163,17 @@ class WPMUDEV_Dashboard_Api {
 		);
 
 		if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
-			$data = $response['body'];
-
-			if ( 'error' != $data ) {
-				$data = json_decode( $data, true );
-
-				if ( is_array( $data ) ) {
-					$data['timestamp'] = time();
-					WPMUDEV_Dashboard::$site->set_transient(
-						'changelog_' . $pid,
-						$data,
-						WEEK_IN_SECONDS
-					);
-					$res = $data;
-				} else {
-					$this->parse_api_error( 'Error unserializing remote response' );
-				}
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( is_array( $data ) ) {
+				$data['timestamp'] = time();
+				WPMUDEV_Dashboard::$site->set_transient(
+					'changelog_' . $pid,
+					$data,
+					WEEK_IN_SECONDS
+				);
+				$res = $data;
 			} else {
-				$this->parse_api_error( 'API returned error' );
-				WPMUDEV_Dashboard::$site->logout();
+				$this->parse_api_error( 'Error unserializing remote response' );
 			}
 		} else {
 			$this->parse_api_error( $response );
@@ -1247,9 +1261,6 @@ class WPMUDEV_Dashboard_Api {
 				if ( ! $item->has_update ) {
 					continue;
 				}
-
-				// Schedule auto-upgrade if that feature is enabled.
-				WPMUDEV_Dashboard::$upgrader->maybe_auto_upgrade( $item );
 
 				/**
 				 * Allows excluding certain projects from update notifications.
@@ -1525,7 +1536,7 @@ class WPMUDEV_Dashboard_Api {
 			'POST'
 		);
 
-		if ( 200 != wp_remote_retrieve_response_code( $response ) || 'true' != $response['body'] ) {
+		if ( 200 != wp_remote_retrieve_response_code( $response ) || 'true' != wp_remote_retrieve_body( $response ) ) {
 			$this->parse_api_error( $response );
 
 			return false;
@@ -1664,12 +1675,17 @@ class WPMUDEV_Dashboard_Api {
 		}
 		$this->api_error = '';
 
+		$body = is_array( $response )
+			? wp_remote_retrieve_body( $response )
+			: false
+		;
+
 		if ( is_scalar( $response ) ) {
 			$this->api_error = $response;
 		} elseif ( is_wp_error( $response ) ) {
 			$this->api_error = $response->get_error_message();
-		} elseif ( is_array( $response ) && ! empty( $response['body'] ) ) {
-			$data = json_decode( $response['body'], true );
+		} elseif ( is_array( $response ) && ! empty( $body ) ) {
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
 			if ( is_array( $data ) && ! empty( $data['message'] ) ) {
 				$this->api_error = $data['message'];
 			}
@@ -1737,7 +1753,7 @@ class WPMUDEV_Dashboard_Api {
 		);
 
 		// If error was "invalid API key" then log out the user. (we don't call logout here to avoid infinite loop)
-		if ( 401 == $error_code ) {
+		if ( 401 == $error_code && ! defined( 'WPMUDEV_APIKEY' ) && ! defined( 'WPMUDEV_OVERRIDE_LOGOUT' ) ) {
 			WPMUDEV_Dashboard::$api->set_key( '' );
 		}
 	}

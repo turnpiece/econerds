@@ -27,7 +27,7 @@ $url_api_setting = $urls->remote_site . 'hub/account/';
 $url_settings = $urls->settings_url;
 
 // Render the page header section.
-$page_title = __( 'Manage', 'wpmudev' );
+$page_title = __( 'Settings', 'wpmudev' );
 $this->render_header( $page_title );
 
 // Adding users is only passible when the admin did not define a hardcoded
@@ -53,12 +53,12 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 				switch ( $membership_type ) {
 					case 'full':
 						_e( 'Full', 'wpmudev' );
-						echo '<i class="status-ok dev-icon dev-icon-radio_checked"></i>';
+						echo '<i aria-hidden="true" class="status-ok dev-icon dev-icon-radio_checked"></i>';
 						break;
 
 					case 'single':
 						_e( 'Single', 'wpmudev' );
-						echo '<i class="status-ok dev-icon dev-icon-radio_checked"></i>';
+						echo '<i aria-hidden="true" class="status-ok dev-icon dev-icon-radio_checked"></i>';
 						break;
 
 					default:
@@ -85,7 +85,7 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 			<span class="value">
 				Staff-Hero
 				<span class="status-ok" tooltip="<?php echo "Your duty is no easy one:\n\nHelp members in need...\nMake stranges smile...\nFight evil...\nSave kittens!"; ?>">
-					<i class="dev-icon dev-icon-logo_alt"></i>
+					<i aria-hidden="true" class="dev-icon dev-icon-logo_alt"></i>
 				</span>
 			</span>
 		</div>
@@ -96,18 +96,13 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 				<?php echo esc_html( date_i18n( 'F d, Y', $profile['member_since'] ) ); ?>
 			</span>
 		</div>
-		<div class="buttons">
-			<a href="<?php echo esc_url( $url_membership ); ?>" target="_blank" class="button">
-				<?php _e( 'Change plan', 'wpmudev' ); ?>
-			</a>
-		</div>
 	</div>
 </section>
 
 <section class="box-apikey dev-box">
 	<div class="box-title">
 		<span class="buttons">
-			<a href="<?php echo esc_url( $url_api_setting ); ?>" class="button button-small button-grey" target="_blank">
+			<a href="<?php echo esc_url( $url_api_setting ); ?>" class="wpmudui-btn is-ghost is-sm" target="_blank">
 				<?php _e( 'Manage global API settings', 'wpmudev' ); ?>
 			</a>
 		</span>
@@ -193,7 +188,8 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 				<span class="list-detail">
 					<?php if ( $can_manage_users && ! $user['is_me'] ) : ?>
 					<a href="<?php echo esc_url( $remove_url ); ?>" class="one-click button button-text show-on-hover">
-						<i class="dashicons dashicons-no-alt"></i>
+						<span class="wpdui-sr-only">Remove user</span>
+						<i aria-hidden="true" class="dashicons dashicons-no-alt"></i>
 					</a>
 					<?php endif; ?>
 				</span>
@@ -220,6 +216,7 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 					<input type="hidden" name="action" value="admin-add" />
 					<?php wp_nonce_field( 'admin-add', 'hash' ) ?>
 					<span class="list-label" style="width: 100%">
+						<label for="user-search" class="wpdui-sr-only"><?php esc_attr_e( "Type an admin user's name", 'wpmudev' ); ?></label>
 						<input
 							type="search"
 							name="user"
@@ -230,7 +227,7 @@ if ( WPMUDEV_LIMIT_TO_USER ) {
 							data-empty-msg="<?php esc_attr_e( 'We did not find an admin user with this name...', 'wpmudev' ); ?>" />
 					</span>
 					<span class="list-detail">
-						<button id="user-add" type="submit" class="button one-click">
+						<button id="user-add" type="submit" class="wpmudui-btn is-brand one-click">
 							<?php _e( 'Add', 'wpmudev' ); ?>
 						</button>
 					</span>

@@ -30,12 +30,9 @@
 	width: 80%;
 }
 
-/*.upfront_login-item-display_behavior .upfront-field-multiple,
-.upfront_login-logout_style .upfront-field-multiple {
-	max-width: 48%;
-	margin-right: 1%;
-	float: left;
-}*/
+.upfront_login-item-display_behavior .upfront-settings-item-title {
+	padding-bottom: 8px;
+}
 
 .upfront_login-logout_text {
 	clear:both;
@@ -174,7 +171,7 @@ div.upfront-login_element-module.upfront-module-active .upfront_login.upfront_lo
 	font-size: 11px;
 	font-weight: normal;
 	font-family: verdana, sans-serif;
-	padding: 15px 15px 5px 15px;
+	padding: 15px 0px 5px 0px;
 	opacity: .8;
 	line-height: 1.7;
 }
@@ -190,66 +187,6 @@ div.upfront-login_element-module.upfront-module-active .upfront_login.upfront_lo
   width: 90%;
 }
 
-#element-settings-sidebar .upfront_toggle {
-	position: relative;
-	width: 40px;
-	display: inline-table;
-	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	&.hide {
-			display: none;
-	}
-}
-
-#element-settings-sidebar input.upfront_toggle_checkbox {
-	display: none;
-}
-
-#element-settings-sidebar .upfront_toggle_switch {
-	display: block;
-	width: 13px;
-	height: 13px;
-	background-color: #fff;
-	border-radius: 15px;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	position: absolute;
-	top: 1px;
-	bottom: 0;
-	right: initial;
-	left: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	will-change: transform;
-	-webkit-transition: transform 0.2s;
-	transition: transform 0.2s;
-}
-
-#element-settings-sidebar .upfront_toggle_label {
-	position: relative;
-	display: block;
-	cursor: pointer;
-	border-radius: 50px;
-	border: 0;
-	width: 40px;
-	height: 15px;
-	background: #ddd;
-	margin-left: 3px;
-	margin-top: 10px;
-}
-
-#element-settings-sidebar .upfront_toggle_checkbox:checked + .upfront_toggle_label {
-	background: #1fcd8f;
-}
-
-#element-settings-sidebar .upfront_toggle_checkbox:checked + .upfront_toggle_label .upfront_toggle_switch {
-	-webkit-transform: translateX(22px);
-	transform: translateX(22px);
-	border-color: #1abc9c;
-}
 
 #element-settings-sidebar .upfront-field-wrap.offset {
 	width: 50%;
@@ -267,4 +204,4 @@ div.upfront-login_element-module.upfront-module-active .upfront_login.upfront_lo
 }
 
 
-/* 87274-1494967147-ai */
+/* 87274-1507059656-au */

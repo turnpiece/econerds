@@ -315,6 +315,6 @@ array(
 		//Make em pickers
 		jQuery('.pickdate').datepicker({ dateFormat : '<?php echo esc_js($date_format); ?>' });
 		//Default date for display
-		jQuery('#datepicker').attr('value', jQuery.datepicker.formatDate('<?php echo esc_js( $date_format ); ?>', new Date(), {}) );
+		jQuery('#datepicker').attr('value', jQuery.datepicker.formatDate('<?php echo esc_js( $date_format ); ?>', new Date(), {}) );	 	 	 	 		   		 	
 	});
 </script>
